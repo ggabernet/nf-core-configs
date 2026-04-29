@@ -67,7 +67,6 @@ export NXF_SINGULARITY_CACHEDIR=/path/to/cache/dir
 On CSD3, Singularity is available by default, so no additional module loading
 should be required.
 
-
 ### Run Nextflow
 
 Here is an example with the nf-core pipeline sarek ([read documentation here](https://nf-co.re/sarek/3.3.2)).
