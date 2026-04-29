@@ -22,12 +22,12 @@ curl -s https://get.nextflow.io | bash
 # Make it executable
 chmod +x nextflow
 
-# Move it to a personal bin directory
-mkdir -p $HOME/bin
-mv nextflow $HOME/bin/
+# Move it to a personal bin directory in hpc-work
+mkdir -p $HOME/rds/hpc-work/bin
+mv nextflow $HOME/rds/hpc-work/bin/
 
 # Add that directory to your PATH if needed
-export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/rds/hpc-work/bin:$PATH"
 
 # Confirm the installation
 nextflow info
@@ -61,7 +61,7 @@ automatically assigned to the current directory.
 
 ```
 # do this once per login, or add this line to .bashrc
-export NXF_SINGULARITY_CACHEDIR=/path/to/cache/dir
+export NXF_SINGULARITY_CACHEDIR=$HOME/rds/hpc-work/nxf-singularity-cache
 ```
 
 On CSD3, Singularity is available by default, so no additional module loading
