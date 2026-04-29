@@ -130,6 +130,20 @@ tmux attach -t nextflow
 screen -r nextflow
 ```
 
+#### Limit Nextflow JVM memory (recommended)
+
+If needed, you can limit the memory used by the Nextflow manager process by
+setting:
+
+```bash
+export NXF_JVM_ARGS='-Xms2g -Xmx4g'
+```
+
+This is a conservative example that should work for most runs. If the Nextflow
+manager process still runs into memory errors, increase `-Xmx` accordingly.
+This must be set **before** launching `nextflow run ...`. If you want to use
+this setting by default, you can add the export line to your `~/.bashrc`.
+
 #### Large runs
 
 For large runs, for example workflows with many samples or many tasks, the
