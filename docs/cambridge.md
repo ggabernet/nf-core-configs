@@ -81,9 +81,7 @@ workflows. `icelake-himem` is the better option when processes need more memory
 per CPU, for example memory-hungry tasks or jobs using only a small number of
 CPUs but requiring substantial RAM. `sapphire` provides newer Sapphire Rapids
 nodes with 112 CPUs and about 4.5 GiB RAM per CPU (512 GB per node), so it may
-be a better fit for higher-CPU jobs than `icelake`. This profile therefore keeps
-`icelake` as the default and lets users switch partitions explicitly with
-`--partition`.
+be a better fit for higher-CPU jobs than `icelake`.
 
 #### Example
 
@@ -96,9 +94,9 @@ nextflow run nf-core/sarek -profile test,cambridge --partition icelake --project
 If the project name contains `-SL3-`, the profile applies a 12 h walltime cap.
 Otherwise it assumes the standard SL1 / SL2 36 h limit.
 
-#### Running longer workflows
+#### Running Nextflow on CSD3
 
-For long runs, we recommend starting Nextflow inside a `screen` or `tmux`
+We recommend starting Nextflow inside a `screen` or `tmux`
 session so that the Nextflow manager process keeps running after you disconnect
 your SSH session.
 
@@ -117,8 +115,8 @@ screen -r nextflow
 Detaching from `tmux` leaves the workflow running in the background with
 `Ctrl-b` then `d`. For `screen`, use `Ctrl-a` then `d`.
 
-You can then logout of the HPC and reattach to the session later. 
-Before logging out, make sure to **note the node you’re on**. 
+You can then logout of the HPC and reattach to the session later.
+Before logging out, make sure to **note the node you’re on**.
 Suppose your login node was called `login-p-3`, you can later log back into this specific node as follows:
 
 ```bash
@@ -131,13 +129,18 @@ Then, you can re-attach to the `tmux`/`screen` session:
 tmux attach -t nextflow
 screen -r nextflow
 ```
-For large runs, especially with many samples, the Nextflow manager process can
-itself use substantial memory. In those cases, it is better to launch
-`nextflow run ...` inside an interactive `srun` session or submit it via
-`sbatch`, rather than running it directly on a login node.
+
+#### Large runs
+
+For large runs, for example workflows with many samples or many tasks, the
+Nextflow manager process can itself use substantial memory. In those cases, it
+is better to launch `nextflow run ...` inside an interactive `srun` session or
+submit it via `sbatch`, rather than running it directly on a login node.
+
+#### `work` directory
 
 All of the intermediate files required to run the pipeline will be stored in
-the `work/` directory. It is recommended to delete this directory after the
+the `work/` directory. It is recommended to **delete** this directory after the
 pipeline has finished successfully because it can get quite large, and all of
 the main output files will be saved in the `--outdir` directory anyway.
 
