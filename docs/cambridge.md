@@ -117,6 +117,20 @@ screen -r nextflow
 Detaching from `tmux` leaves the workflow running in the background with
 `Ctrl-b` then `d`. For `screen`, use `Ctrl-a` then `d`.
 
+You can then logout of the HPC and reattach to the session later. 
+Before logging out, make sure to **note the node you’re on**. 
+Suppose your login node was called `login-p-3`, you can later log back into this specific node as follows:
+
+```bash
+ssh username@login-p-3.hpc.cam.ac.uk
+```
+
+Then, you can re-attach to the `tmux`/`screen` session:
+
+```bash
+tmux attach -t nextflow
+screen -r nextflow
+```
 For large runs, especially with many samples, the Nextflow manager process can
 itself use substantial memory. In those cases, it is better to launch
 `nextflow run ...` inside an interactive `srun` session or submit it via
