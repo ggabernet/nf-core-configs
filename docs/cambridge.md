@@ -33,6 +33,9 @@ export PATH="$HOME/bin:$PATH"
 nextflow info
 ```
 
+To make the `PATH` change persistent across sessions, add the `export PATH=...`
+line to your `~/.bashrc` or equivalent shell startup file.
+
 See the official installation guide for the latest details and Java
 requirements:
 
@@ -51,14 +54,18 @@ more conservative recommendation here.
 
 ### Set up Singularity cache
 
-Singularity allows the use of containers and will use a caching strategy. First, you might want to set the `NXF_SINGULARITY_CACHEDIR` bash environment variable, pointing at your hpc-work location. If not, it will be automatically assigned to the current directory.
+Singularity allows the use of containers and will use a caching strategy. First,
+you might want to set the `NXF_SINGULARITY_CACHEDIR` bash environment variable,
+pointing at a directory with sufficient space. If not, it will be
+automatically assigned to the current directory.
 
 ```
-# do this once per login, or add these lines to .bashrc
-export NXF_SINGULARITY_CACHEDIR=/home/<username>/singularity
+# do this once per login, or add this line to .bashrc
+export NXF_SINGULARITY_CACHEDIR=/path/to/cache/dir
 ```
 
-Once done, and ready to use Nextflow, you can check that the Singularity module is loaded by default when logging on the cluster.
+On CSD3, Singularity is available by default, so no additional module loading
+should be required.
 
 
 ### Run Nextflow
@@ -102,4 +109,4 @@ itself use substantial memory. In those cases, it is better to launch `nextflow 
 All of the intermediate files required to run the pipeline will be stored in the `work/` directory. It is recommended to delete this directory after the pipeline has finished successfully because it can get quite large, and all of the main output files will be saved in the `--outdir` directory anyway.
 
 > NB: You will need an account to use the Cambridge HPC cluster in order to run the pipeline. If in doubt contact IT.
-> NB: Nextflow will need to submit the jobs via SLURM to the Cambridge HPC cluster and as such the commands above will have to be executed on one of the login  nodes. If in doubt contact IT.
+> NB: Nextflow will need to submit the jobs via SLURM to the Cambridge HPC cluster and as such the commands above will have to be executed on one of the login nodes. If in doubt contact IT.
