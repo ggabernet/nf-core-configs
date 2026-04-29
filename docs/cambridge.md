@@ -1,14 +1,13 @@
 # nf-core/configs: Cambridge HPC Configuration
 
-All nf-core pipelines have been successfully configured for use on the Cambridge HPC cluster at the [The University of Cambridge](https://www.cam.ac.uk/).
-To use, run the pipeline with `-profile cambridge`. This will download and launch the [`cambridge.config`](../conf/cambridge.config) which has been pre-configured
-with a setup suitable for the Cambridge HPC cluster. Using this profile, either a docker image containing all of the required software will be downloaded,
-and converted to a Singularity image or a Singularity image downloaded directly before execution of the pipeline.
+All nf-core pipelines can be run on the [Cambridge HPC cluster](https://docs.hpc.cam.ac.uk/hpc/index.html) at the University of Cambridge using `-profile cambridge`.
+This will download and use the [`cambridge.config`](../conf/cambridge.config)
+institutional profile, which is configured for running pipelines on CSD3 with
+Singularity containers.
 
 ### Install Nextflow
 
-The latest version of Nextflow is not installed by default on the Cambridge HPC
-cluster CSD3.
+The latest version of Nextflow is not installed by default on CSD3.
 
 The recommended option is the standard Nextflow self-installing package:
 
@@ -48,7 +47,8 @@ an environment with `nextflow`:
 - [micromamba installation guide](https://mamba.readthedocs.io/en/stable/installation/micromamba-installation.html)
 - [nf-core conda installation instructions](https://nf-co.re/docs/usage/getting_started/installation#conda-installation)
 
-`pixi` (see more info [here](https://pixi.prefix.dev/latest/)) may also work well for personal environment management, but this profile
+`pixi` may also work well for personal environment management; see the
+[pixi documentation](https://pixi.prefix.dev/latest/). However, this profile
 does not currently provide tested `pixi` instructions, so `micromamba` is the
 more conservative recommendation here.
 
@@ -74,6 +74,19 @@ The profile defaults to the `icelake` partition, but users can switch to
 `icelake-himem` or `sapphire` with `--partition`. The user should also provide
 their SLURM project / account with `--project`.
 
+#### Choosing a partition
+
+As a rough guide, `icelake` is the default general-purpose choice for most
+workflows. `icelake-himem` is the better option when processes need more memory
+per CPU, for example memory-hungry tasks or jobs using only a small number of
+CPUs but requiring substantial RAM. `sapphire` provides newer Sapphire Rapids
+nodes with 112 CPUs and about 4.5 GiB RAM per CPU (512 GB per node), so it may
+be a better fit for higher-CPU jobs than `icelake`. This profile therefore keeps
+`icelake` as the default and lets users switch partitions explicitly with
+`--partition`.
+
+#### Example
+
 ```
 # Launch the nf-core pipeline for a test database
 # with the Cambridge profile
@@ -83,7 +96,9 @@ nextflow run nf-core/sarek -profile test,cambridge --partition icelake --project
 If the project name contains `-SL3-`, the profile applies a 12 h walltime cap.
 Otherwise it assumes the standard SL1 / SL2 36 h limit.
 
-**For long runs**, we recommend starting Nextflow inside a `screen` or `tmux`
+#### Running longer workflows
+
+For long runs, we recommend starting Nextflow inside a `screen` or `tmux`
 session so that the Nextflow manager process keeps running after you disconnect
 your SSH session.
 
@@ -102,10 +117,15 @@ screen -r nextflow
 Detaching from `tmux` leaves the workflow running in the background with
 `Ctrl-b` then `d`. For `screen`, use `Ctrl-a` then `d`.
 
-**For large runs**, especially with many samples, the Nextflow manager process can
-itself use substantial memory. In those cases, it is better to launch `nextflow run ...` inside an interactive `srun` session or submit it via `sbatch`, rather than running it directly on a login node.
+For large runs, especially with many samples, the Nextflow manager process can
+itself use substantial memory. In those cases, it is better to launch
+`nextflow run ...` inside an interactive `srun` session or submit it via
+`sbatch`, rather than running it directly on a login node.
 
-All of the intermediate files required to run the pipeline will be stored in the `work/` directory. It is recommended to delete this directory after the pipeline has finished successfully because it can get quite large, and all of the main output files will be saved in the `--outdir` directory anyway.
+All of the intermediate files required to run the pipeline will be stored in
+the `work/` directory. It is recommended to delete this directory after the
+pipeline has finished successfully because it can get quite large, and all of
+the main output files will be saved in the `--outdir` directory anyway.
 
 > NB: You will need an account to use the Cambridge HPC cluster in order to run the pipeline. If in doubt contact IT.
 > NB: Nextflow will need to submit the jobs via SLURM to the Cambridge HPC cluster and as such the commands above will have to be executed on one of the login nodes. If in doubt contact IT.
